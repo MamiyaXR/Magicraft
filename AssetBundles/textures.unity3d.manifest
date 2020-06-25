@@ -1,0 +1,22 @@
+ManifestFileVersion: 0
+CRC: 3078810472
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 9094118c3c9980e98e17f2b0948d9bc1
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2ed26e3ad9f6be9c24f85f5f5b54339d
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Textures/log_acacia.png
+- Assets/Textures/grass_side.png
+- Assets/Textures/leaves_acacia.png
+- Assets/Textures/log_acacia_top.png
+- Assets/Textures/dirt.png
+- Assets/Textures/stone.png
+- Assets/Textures/grass_top.png
+Dependencies: []
