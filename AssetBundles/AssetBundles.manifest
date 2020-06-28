@@ -1,7 +1,13 @@
 ManifestFileVersion: 0
-CRC: 3331813150
+CRC: 2749708920
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
+      Name: runeletters.unity3d
+      Dependencies: {}
+    Info_1:
       Name: textures.unity3d
+      Dependencies: {}
+    Info_2:
+      Name: fire.unity3d
       Dependencies: {}

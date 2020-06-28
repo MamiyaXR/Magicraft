@@ -7,6 +7,9 @@ public class MovementInput : MonoBehaviour
 {
     public bool active;
     public float velocity;
+    public float verticalVel;
+    public Transform groundCheck;
+    public LayerMask layer;
     [Space]
     public float allowPlayerMove = 0.1f;
     public bool blockPlayerRotation = false;
@@ -26,32 +29,90 @@ public class MovementInput : MonoBehaviour
     private float inputZ;
     private float speed;
     private bool isGround;
-    private float verticalSpeed;
+    private bool isJumpping;
+    private bool isFalling;
     private Vector3 desiretMoveDirection;
     private Vector3 moveVector;
+    private float playerYPosSave;
+    private float verticalSpeed = 0;
 
     private CharacterController controller;
     private Animator anim;
-    private Camera cam;
+
+
+    private bool isDancing = false;
+    private bool isWaving = false;
 
     public void Start()
     {
+        playerYPosSave = transform.position.y;
         controller = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
-        cam = Camera.main;
     }
 
     public void Update()
     {
+        JumpCheck();
         InputMagnitude();
-
-        isGround = controller.isGrounded;
-        if (isGround)
-            verticalSpeed -= 0;
+        //***************************************************************
+        
+        if (isDancing || isWaving)
+        {
+            if (Input.anyKeyDown)
+            {
+                anim.SetTrigger("End Trig");
+                isDancing = false;
+                isWaving = false;
+            }
+        }
         else
-            verticalSpeed -= 1;
-        moveVector = new Vector3(0, verticalSpeed * .2f * Time.deltaTime, 0);
+        {
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                anim.SetTrigger("Dancing Trig");
+                isDancing = true;
+            } else if(Input.GetKeyDown(KeyCode.V))
+            {
+                anim.SetTrigger("Waving Trig");
+                isWaving = true;
+            }
+        }
+        
+        //***************************************************************
+    }
+
+    private void JumpCheck()
+    {
+        if (Physics.OverlapSphere(groundCheck.position, 0.1f, layer).Length != 0)
+            isGround = true;
+        else
+            isGround = false;
+        anim.SetBool("IsGround", isGround);
+        moveVector = new Vector3(0, verticalSpeed * Time.deltaTime, 0);
         controller.Move(moveVector);
+        if (isGround)
+        {
+            verticalSpeed -= 0;
+            isJumpping = false;
+            isFalling = false;
+            if (Input.GetKeyDown(KeyCode.Space))
+                verticalSpeed = verticalVel;
+        }
+        else
+        {
+            verticalSpeed -= 9.81f * Time.deltaTime;
+            if (transform.position.y > playerYPosSave && !isJumpping)
+            {
+                isJumpping = true;
+                anim.SetTrigger("Jump Up");
+            }
+            else if (transform.position.y < playerYPosSave && !isFalling)
+            {
+                isFalling = true;
+                anim.SetTrigger("Jump Down");
+            }
+        }
+        playerYPosSave = transform.position.y;
     }
 
     private void InputMagnitude()
@@ -63,27 +124,41 @@ public class MovementInput : MonoBehaviour
         if(speed > allowPlayerMove)
         {
             anim.SetFloat("Blend", speed, StartAnimTime, Time.deltaTime);
-            PlayerMoveAndRotation(inputX, inputZ);
+            PlayerMove(inputX, inputZ);
+            if(CameraController.mode == CameraMode.ThirdPersonCam)
+                PlayerRotation();
         } else if(speed < allowPlayerMove)
         {
             anim.SetFloat("Blend", speed, StopAnimTime, Time.deltaTime);
         }
+        if(CameraController.mode == CameraMode.FirstPersonCam && CameraController.canRotation)
+            PlayerRotation();
     }
 
-    private void PlayerMoveAndRotation(float inputX, float inputZ)
+    private void PlayerRotation()
     {
-        Vector3 forward = cam.transform.forward;
-        Vector3 right = cam.transform.right;
+        if (blockPlayerRotation)
+            return;
+        
+        if(CameraController.mode == CameraMode.FirstPersonCam)
+        {
+            float rotationX = 0f;
+            rotationX += Camera.main.transform.localEulerAngles.y + Input.GetAxis("Mouse X") * 5f;
+            transform.localEulerAngles = new Vector3(0, rotationX, 0);
+        }
+        else if (CameraController.mode == CameraMode.ThirdPersonCam)
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(desiretMoveDirection), desiretRotationSpeed);
+    }
+    private void PlayerMove(float inputX, float inputZ)
+    {
+        Vector3 forward = Camera.main.transform.forward;
+        Vector3 right = Camera.main.transform.right;
 
         forward.y = 0;
         right.y = 0;
 
         desiretMoveDirection = forward * inputZ + right * inputX;
 
-        if(blockPlayerRotation == false)
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(desiretMoveDirection), desiretRotationSpeed);
-            controller.Move(desiretMoveDirection * velocity * Time.deltaTime);
-        }
+        controller.Move(desiretMoveDirection * velocity * Time.deltaTime);
     }
 }

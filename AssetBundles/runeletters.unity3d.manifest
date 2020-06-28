@@ -1,0 +1,19 @@
+ManifestFileVersion: 0
+CRC: 1029538641
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: bba6bddaa63fe086dcfbdb7bbdac1c9e
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: f2fd4bad121384fca89f20be4aac127c
+HashAppended: 0
+ClassTypes:
+- Class: 114
+  Script: {fileID: 11500000, guid: 7ce0fdb4e39b5744abf0c061bd2a3e30, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+Assets:
+- Assets/RuneLetters/force.asset
+- Assets/RuneLetters/fire.asset
+Dependencies: []

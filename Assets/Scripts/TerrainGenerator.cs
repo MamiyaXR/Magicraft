@@ -16,6 +16,7 @@ public struct ChunkPos
 public class TerrainGenerator : MonoBehaviour
 {
     public Vector3 originalPos = Vector3.zero;
+    public Transform player;
     //区块模板
     public GameObject terrainChunk;
     public static Dictionary<ChunkPos, TerrainChunk> chunkDict = new Dictionary<ChunkPos, TerrainChunk>();
@@ -141,8 +142,17 @@ public class TerrainGenerator : MonoBehaviour
     ChunkPos curChunk = new ChunkPos(-1, -1);
     void LoadChunks(bool instant = false)
     {
-        int curChunkPosX = Mathf.FloorToInt(originalPos.x / 16) * 16;
-        int curChunkPosZ = Mathf.FloorToInt(originalPos.z / 16) * 16;
+        int curChunkPosX = 0;
+        int curChunkPosZ = 0;
+        if (player != null)
+        {
+            curChunkPosX = Mathf.FloorToInt(player.position.x / 16) * 16;
+            curChunkPosZ = Mathf.FloorToInt(player.position.z / 16) * 16;
+        } else
+        {
+            curChunkPosX = Mathf.FloorToInt(originalPos.x / 16) * 16;
+            curChunkPosZ = Mathf.FloorToInt(originalPos.z / 16) * 16;
+        }
 
         if (curChunk.xPos != curChunkPosX || curChunk.zPos != curChunkPosZ)
         {
