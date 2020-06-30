@@ -24,9 +24,10 @@ public class Fire : MonoBehaviour
     }
     private IEnumerator Wait(float time)
     {
-        for(float i = time; i >= 0; i -= Time.deltaTime)
+        Vector3 scale = transform.localScale;
+        for (float i = time; i >= 0; i -= Time.deltaTime)
         {
-            transform.localScale = Vector3.one * i / time;
+            transform.localScale = scale * i / time;
             yield return 0;
         }
         Destroy(gameObject);

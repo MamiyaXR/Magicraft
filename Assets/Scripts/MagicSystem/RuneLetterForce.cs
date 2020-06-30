@@ -35,7 +35,7 @@ public class RuneLetterForce : RuneLetter
             {
                 Rigidbody rbody = collider.GetComponent<Rigidbody>();
                 if (rbody != null)
-                    rbody.AddForce(e.direction * 50f);
+                    rbody.AddForce(e.direction * e.magicPower);
             }
         }
     }

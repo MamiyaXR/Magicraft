@@ -2,39 +2,72 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 
 public class MagicController : MonoBehaviour
 {
     public static bool canUseMagic = true;
     public static bool isUsingMagic = false;
-    public Transform originPos;
-    public Transform startPos;
-    public GameObject magicGroup;
-    public DrawDetector drawDetector;
+    [SerializeField]
+    private Transform originPos = null;
+    [SerializeField]
+    private Transform startPos = null;
+    [SerializeField]
+    private GameObject magicGroup = null;
+    [Space]
+    public float magicPowerMax = 0;
+    [SerializeField]
+    private float magicRevertSpeed = 0;
+    [SerializeField]
+    private float magicExpenseSpeed = 0;
+    private float magicExpense = 0;
+    private bool isCalcMaigc;
+    private float _magicPower;
+    public float magicPower { get => _magicPower; }
     private MagicManager _magicManager;
     public MagicManager magicManager { get => _magicManager; }
+
     private void Awake()
     {
+        _magicPower = magicPowerMax;
         _magicManager = new MagicManager();
+        isCalcMaigc = false;
     }
     private void Update()
     {
-        if(canUseMagic && Input.GetKeyDown(KeyCode.LeftShift))
+        MagicPowerRevert();
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            if (isUsingMagic)
+            if (!isUsingMagic)
             {
-                Vector3 pos = Camera.main.WorldToScreenPoint(startPos.position);
-                Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, pos.z));
-                Vector3 direction = mousePos - originPos.position;
-                direction.Normalize();
-                float distance = 3f;
-                magicManager.OnMagic(gameObject, new MagicEventArgs(originPos.position, direction, distance));
-                magicManager.ClearMagic();
+                isUsingMagic = true;
+                CameraController.canChangeCam = false;
+                CameraController.canRotation = false;
+                magicGroup.SetActive(true);
             }
-            magicGroup.SetActive(!magicGroup.activeSelf);
-            isUsingMagic = !isUsingMagic;
-            CameraController.canChangeCam = !CameraController.canChangeCam;
-            CameraController.canRotation = !CameraController.canRotation;
+            else
+            {
+                StartCoroutine("MagicPowerCalc");
+                isCalcMaigc = true;
+            }
+        }
+        else if (isCalcMaigc && Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            StopCoroutine("MagicPowerCalc");
+            isCalcMaigc = false;
+            Vector3 pos = Camera.main.WorldToScreenPoint(startPos.position);
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, pos.z));
+            Vector3 direction = mousePos - originPos.position;
+            direction.Normalize();
+            float distance = 3f;
+            magicManager.OnMagic(gameObject, new MagicEventArgs(magicExpense, originPos.position, direction, distance));
+            magicManager.ClearMagic();
+            isUsingMagic = false;
+            CameraController.canChangeCam = true;
+            CameraController.canRotation = true;
+            magicGroup.SetActive(false);
+            magicExpense = 0;
         }
 
         if (Input.GetKeyDown(KeyCode.M))
@@ -44,6 +77,28 @@ public class MagicController : MonoBehaviour
             obj.transform.position = startPos.position;
             Rigidbody rbody =  obj.AddComponent<Rigidbody>();
             rbody.mass = 0.1f;
+        }
+    }
+    private void MagicPowerRevert()
+    {
+        if (!isCalcMaigc)
+        {
+            if (_magicPower < magicPowerMax)
+                _magicPower += magicPowerMax * magicRevertSpeed * Time.deltaTime;
+            else if (_magicPower > magicPowerMax)
+                _magicPower = magicPowerMax;
+        }
+    }
+
+    IEnumerator MagicPowerCalc()
+    {
+        float temp = 0;
+        while (_magicPower > 0)
+        {
+            temp = magicPowerMax * magicExpenseSpeed * Time.deltaTime;
+            magicExpense += temp;
+            _magicPower -= temp;
+            yield return 0;
         }
     }
 }

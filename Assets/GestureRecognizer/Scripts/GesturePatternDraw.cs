@@ -14,7 +14,7 @@ namespace GestureRecognizer {
 
 		public float endingSize = 0;
 
-		void OnValidate(){
+		protected override void OnValidate(){
 			this.relativeSize = true;
 			this.endingSize = Mathf.Max (0, this.endingSize);
 			this.LineList = true;

@@ -32,6 +32,7 @@ public class RuneLetterFire : RuneLetter
     /// </summary>
     public override void MagicLaunch(GameObject caster, MagicEventArgs e)
     {
-        GameObject.Instantiate(fireBase, e.origin + e.direction * e.distance, Quaternion.identity);
+        GameObject obj = GameObject.Instantiate(fireBase, e.origin + e.direction * e.distance, Quaternion.identity);
+        obj.transform.localScale *= 1 + e.magicPower / 100;
     }
 }

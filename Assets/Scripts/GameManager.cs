@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,13 +10,16 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private static GameManager _instance;
     public static GameManager Instance { get => _instance; }
-    public MagicManager magicManager;
+
+    public MagicController magicController;
     private void Awake()
     {
         _instance = this;
-        magicManager = new MagicManager();
         SetCursorVisible(false);
     }
+
+    [SerializeField]
+    private Slider slider = null;
     /// <summary>
     /// 鼠标的显示与隐藏
     /// </summary>
@@ -28,11 +32,16 @@ public class GameManager : MonoBehaviour
         else
             Cursor.lockState = CursorLockMode.Locked;
     }
+    private void Start()
+    {
+        slider.maxValue = magicController.magicPowerMax;
+    }
     private void Update()
     {
         if (MagicController.isUsingMagic)
             SetCursorVisible(true);
         else
             SetCursorVisible(false);
+        slider.value = magicController.magicPower;
     }
 }
