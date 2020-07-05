@@ -2237,7 +2237,6 @@ MonoBehaviour:
   originPos: {fileID: 1816733026}
   startPos: {fileID: 220687419}
   magicGroup: {fileID: 1257955914}
-  drawDetector: {fileID: 632917116}
   magicPowerMax: 100
   magicRevertSpeed: 0.5
   magicExpenseSpeed: 0.5
