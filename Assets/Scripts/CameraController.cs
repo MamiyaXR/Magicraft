@@ -13,15 +13,18 @@ public class CameraController : MonoBehaviour
     public static CameraMode mode;
     public GameObject firstPersonCam;
     public GameObject thirdPersonCam;
+    /*****************************************************************************************
+     *
+     *
+     *
+     *****************************************************************************************/
     void Update()
     {
         if (canChangeCam && Input.GetKeyDown(KeyCode.F5))
-        {
             ChangeLiveCamera();
-        }
     }
     /// <summary>
-    /// 视角切换
+    /// 视角切换函数
     /// </summary>
     private void ChangeLiveCamera()
     {

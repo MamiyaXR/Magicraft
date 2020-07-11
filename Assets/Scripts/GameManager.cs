@@ -5,32 +5,21 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    /// <summary>
-    /// 单例模式构建
-    /// </summary>
+    public MagicController magicController;
+    [SerializeField] private Slider slider = null;
     private static GameManager _instance;
     public static GameManager Instance { get => _instance; }
-
-    public MagicController magicController;
+    /*****************************************************************************************
+     *
+     *
+     *
+     *****************************************************************************************/
     private void Awake()
     {
-        _instance = this;
+        if (_instance == null)
+            _instance = this;
         SetCursorVisible(false);
-    }
-
-    [SerializeField]
-    private Slider slider = null;
-    /// <summary>
-    /// 鼠标的显示与隐藏
-    /// </summary>
-    /// <param name="visible"></param>
-    private void SetCursorVisible(bool visible)
-    {
-        Cursor.visible = visible;
-        if(visible)
-            Cursor.lockState = CursorLockMode.None;
-        else
-            Cursor.lockState = CursorLockMode.Locked;
+        WorldTexture.InitTextureAtlas();
     }
     private void Start()
     {
@@ -43,5 +32,14 @@ public class GameManager : MonoBehaviour
         else
             SetCursorVisible(false);
         slider.value = magicController.magicPower;
+    }
+    //鼠标的显示与隐藏
+    private void SetCursorVisible(bool visible)
+    {
+        Cursor.visible = visible;
+        if(visible)
+            Cursor.lockState = CursorLockMode.None;
+        else
+            Cursor.lockState = CursorLockMode.Locked;
     }
 }

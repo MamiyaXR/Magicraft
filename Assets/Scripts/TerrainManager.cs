@@ -13,19 +13,31 @@ public struct ChunkPos
     }
 }
 
-public class TerrainGenerator : MonoBehaviour
+public class TerrainManager : MonoBehaviour
 {
-    public Vector3 originalPos = Vector3.zero;
-    public Transform player;
+    public Dictionary<ChunkPos, TerrainChunk> chunkDict = new Dictionary<ChunkPos, TerrainChunk>();
     //区块模板
-    public GameObject terrainChunk;
-    public static Dictionary<ChunkPos, TerrainChunk> chunkDict = new Dictionary<ChunkPos, TerrainChunk>();
+    [SerializeField] private GameObject terrainChunk;
+    [SerializeField] private Vector3 originalPos = Vector3.zero;
+    [SerializeField] private Transform player;
     private List<TerrainChunk> chunks = new List<TerrainChunk>();
     private List<ChunkPos> chunkPoses = new List<ChunkPos>();
     //噪声
-    FastNoise noise = new FastNoise();
-    int chunkDist = 5;
+    private FastNoise noise = new FastNoise();
+    private int chunkDist = 5;
 
+    private static TerrainManager _instance;
+    public static TerrainManager instance { get => _instance; }
+    /*****************************************************************************************
+     *
+     *
+     *
+     *****************************************************************************************/
+    private void Awake()
+    {
+        if (_instance == null)
+            _instance = this;
+    }
     public void Start()
     {
         LoadChunks(true);
@@ -49,18 +61,23 @@ public class TerrainGenerator : MonoBehaviour
             chunk = chunkGo.GetComponent<TerrainChunk>();
         }
 
-        for(int x = 0; x < TerrainChunk.chunkWidth + 2; ++x)
+        for(int x = 1; x < TerrainChunk.chunkWidth + 1; ++x)
         {
-            for(int z = 0; z < TerrainChunk.chunkLength + 2; ++z)
+            for(int z = 1; z < TerrainChunk.chunkLength + 1; ++z)
             {
                 for(int y = 0; y < TerrainChunk.chunkHeight; ++y)
                 {
+                    /************************************
+                    *
+                    *    核心语句，待修改
+                    *
+                    ***********************************/
                     chunk.blocks[x, y, z] = GetBlockType(xPos + x - 1, y, zPos + z - 1);
                 }
             }
         }
 
-        GenerateTrees(chunk.blocks, xPos, zPos);
+        //GenerateTrees(chunk.blocks, xPos, zPos);
         chunk.BuildMesh();
 
         chunkDict.Add(new ChunkPos(xPos, zPos), chunk);
@@ -146,21 +163,26 @@ public class TerrainGenerator : MonoBehaviour
         int curChunkPosZ = 0;
         if (player != null)
         {
-            curChunkPosX = Mathf.FloorToInt(player.position.x / 16) * 16;
-            curChunkPosZ = Mathf.FloorToInt(player.position.z / 16) * 16;
+            curChunkPosX = Mathf.FloorToInt(player.position.x / TerrainChunk.chunkWidth) * TerrainChunk.chunkWidth;
+            curChunkPosZ = Mathf.FloorToInt(player.position.z / TerrainChunk.chunkLength) * TerrainChunk.chunkLength;
         } else
         {
-            curChunkPosX = Mathf.FloorToInt(originalPos.x / 16) * 16;
-            curChunkPosZ = Mathf.FloorToInt(originalPos.z / 16) * 16;
+            curChunkPosX = Mathf.FloorToInt(originalPos.x / TerrainChunk.chunkWidth) * TerrainChunk.chunkWidth;
+            curChunkPosZ = Mathf.FloorToInt(originalPos.z / TerrainChunk.chunkLength) * TerrainChunk.chunkLength;
         }
-
+        /************************************
+         *
+         *    只要移动就会刷新，待修改
+         *
+         ***********************************/
         if (curChunk.xPos != curChunkPosX || curChunk.zPos != curChunkPosZ)
         {
             curChunk.xPos = curChunkPosX;
             curChunk.zPos = curChunkPosZ;
 
-            for (int i = curChunkPosX - 16 * chunkDist; i <= curChunkPosX + 16 * chunkDist; i += 16)
-                for (int j = curChunkPosZ - 16 * chunkDist; j <= curChunkPosZ + 16 * chunkDist; j += 16)
+            for (int i = curChunkPosX - TerrainChunk.chunkWidth * chunkDist; i <= curChunkPosX + TerrainChunk.chunkWidth * chunkDist; i += TerrainChunk.chunkWidth)
+            {
+                for (int j = curChunkPosZ - TerrainChunk.chunkLength * chunkDist; j <= curChunkPosZ + TerrainChunk.chunkLength * chunkDist; j += TerrainChunk.chunkLength)
                 {
                     ChunkPos cp = new ChunkPos(i, j);
 
@@ -172,24 +194,22 @@ public class TerrainGenerator : MonoBehaviour
                             chunkPoses.Add(cp);
                     }
                 }
-            //remove chunks that are too far away
+            }
+            //卸载距离过远的区块（实例过的）
             List<ChunkPos> toDestroy = new List<ChunkPos>();
-            //unload chunks
             foreach (KeyValuePair<ChunkPos, TerrainChunk> c in chunkDict)
             {
                 ChunkPos cp = c.Key;
-                if (Mathf.Abs(curChunkPosX - cp.xPos) > 16 * (chunkDist + 3) ||
-                    Mathf.Abs(curChunkPosZ - cp.zPos) > 16 * (chunkDist + 3))
-                {
+                if (Mathf.Abs(curChunkPosX - cp.xPos) > TerrainChunk.chunkWidth * (chunkDist + 3) ||
+                    Mathf.Abs(curChunkPosZ - cp.zPos) > TerrainChunk.chunkLength * (chunkDist + 3))
                     toDestroy.Add(c.Key);
-                }
             }
 
-            //remove any up for generation
+            //卸载距离过远的区块（未实例的）
             foreach (ChunkPos cp in chunkPoses)
             {
-                if (Mathf.Abs(curChunkPosX - cp.xPos) > 16 * (chunkDist + 1) ||
-                    Mathf.Abs(curChunkPosZ - cp.zPos) > 16 * (chunkDist + 1))
+                if (Mathf.Abs(curChunkPosX - cp.xPos) > TerrainChunk.chunkWidth * (chunkDist + 1) ||
+                    Mathf.Abs(curChunkPosZ - cp.zPos) > TerrainChunk.chunkLength * (chunkDist + 1))
                     chunkPoses.Remove(cp);
             }
 

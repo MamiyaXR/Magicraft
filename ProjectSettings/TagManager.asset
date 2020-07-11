@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - ItemOnWorld
+  - PlayerPickRange
+  - Chunk
+  - BlockGroup
   layers:
   - Default
   - TransparentFX
@@ -14,7 +18,7 @@ TagManager:
   - 
   - 
   - Player
-  - 
+  - Block
   - 
   - 
   - 

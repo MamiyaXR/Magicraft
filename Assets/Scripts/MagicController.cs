@@ -8,25 +8,24 @@ public class MagicController : MonoBehaviour
 {
     public static bool canUseMagic = true;
     public static bool isUsingMagic = false;
-    [SerializeField]
-    private Transform originPos = null;
-    [SerializeField]
-    private Transform startPos = null;
-    [SerializeField]
-    private GameObject magicGroup = null;
+    [SerializeField] private Transform originPos;
+    [SerializeField] private Transform startPos;
+    [SerializeField] private GameObject magicGroup;
     [Space]
     public float magicPowerMax = 0;
-    [SerializeField]
-    private float magicRevertSpeed = 0;
-    [SerializeField]
-    private float magicExpenseSpeed = 0;
+    [SerializeField] private float magicRevertSpeed = 0;
+    [SerializeField] private float magicExpenseSpeed = 0;
     private float magicExpense = 0;
     private bool isCalcMaigc;
     private float _magicPower;
     public float magicPower { get => _magicPower; }
     private MagicManager _magicManager;
     public MagicManager magicManager { get => _magicManager; }
-
+    /*****************************************************************************************
+     *
+     *
+     *
+     *****************************************************************************************/
     private void Awake()
     {
         _magicPower = magicPowerMax;
@@ -35,7 +34,27 @@ public class MagicController : MonoBehaviour
     }
     private void Update()
     {
+        //回复魔法值，常
         MagicPowerRevert();
+        //魔法模式控制
+        MagicModeControl();
+        //测试用，待删除
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            obj.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+            obj.transform.position = startPos.position;
+            Rigidbody rbody =  obj.AddComponent<Rigidbody>();
+            rbody.mass = 0.1f;
+        }
+    }
+    /// <summary>
+    /// 魔法模式控制函数
+    /// </summary>
+    private void MagicModeControl()
+    {
+        if (!canUseMagic)
+            return;
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
@@ -69,16 +88,10 @@ public class MagicController : MonoBehaviour
             magicGroup.SetActive(false);
             magicExpense = 0;
         }
-
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            obj.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-            obj.transform.position = startPos.position;
-            Rigidbody rbody =  obj.AddComponent<Rigidbody>();
-            rbody.mass = 0.1f;
-        }
     }
+    /// <summary>
+    /// 魔力值回复函数
+    /// </summary>
     private void MagicPowerRevert()
     {
         if (!isCalcMaigc)
@@ -89,7 +102,10 @@ public class MagicController : MonoBehaviour
                 _magicPower = magicPowerMax;
         }
     }
-
+    /// <summary>
+    /// 蓄力计算携程函数
+    /// </summary>
+    /// <returns></returns>
     IEnumerator MagicPowerCalc()
     {
         float temp = 0;

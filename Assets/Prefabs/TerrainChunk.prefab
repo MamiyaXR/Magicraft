@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 3920180140129196654}
   - component: {fileID: -3435459679947416953}
   - component: {fileID: 2468119946776634647}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: TerrainChunk
-  m_TagString: Untagged
+  m_TagString: Chunk
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -8,9 +8,12 @@ public class TerrainChunk : MonoBehaviour
     public const int chunkWidth = 16;
     public const int chunkLength = 16;
     public const int chunkHeight = 64;
-
     public BlockType[,,] blocks = new BlockType[chunkWidth + 2, chunkHeight, chunkLength + 2];
-
+    /*****************************************************************************************
+     *
+     *
+     *
+     *****************************************************************************************/
     public void BuildMesh()
     {
         Mesh mesh = new Mesh();
@@ -28,65 +31,65 @@ public class TerrainChunk : MonoBehaviour
                     if(blocks[x,y,z] != BlockType.Air)
                     {
                         int faceNum = 0;
-                        Vector3 blockPos = new Vector3(x, y, z);
-                        //top face
+                        Vector3 blockPos = new Vector3(x - 1, y, z - 1);
+                        //top
                         if(y < chunkHeight - 1 && blocks[x, y + 1, z] == BlockType.Air)
                         {
                             vertices.Add(blockPos + new Vector3(0, 1, 0));
                             vertices.Add(blockPos + new Vector3(0, 1, 1));
                             vertices.Add(blockPos + new Vector3(1, 1, 1));
                             vertices.Add(blockPos + new Vector3(1, 1, 0));
-                            uvs.AddRange(Block.blockDict[blocks[x, y, z]].topTexture.uvs);
+                            uvs.AddRange(Block.blockDict[blocks[x, y, z]].top.textureData.uvs);
                             faceNum += 1;
                         }
-                        //bottom face
+                        //bottom
                         if(y > 0 && blocks[x, y - 1, z] == BlockType.Air)
                         {
                             vertices.Add(blockPos + new Vector3(0, 0, 0));
                             vertices.Add(blockPos + new Vector3(1, 0, 0));
                             vertices.Add(blockPos + new Vector3(1, 0, 1));
                             vertices.Add(blockPos + new Vector3(0, 0, 1));
-                            uvs.AddRange(Block.blockDict[blocks[x, y, z]].bottomTexture.uvs);
+                            uvs.AddRange(Block.blockDict[blocks[x, y, z]].bottom.textureData.uvs);
                             faceNum += 1;
                         }
-                        //south face
-                        if(blocks[x, y, z - 1] == BlockType.Air)
-                        {
-                            vertices.Add(blockPos + new Vector3(0, 0, 0));
-                            vertices.Add(blockPos + new Vector3(0, 1, 0));
-                            vertices.Add(blockPos + new Vector3(1, 1, 0));
-                            vertices.Add(blockPos + new Vector3(1, 0, 0));
-                            uvs.AddRange(Block.blockDict[blocks[x, y, z]].sideTexture.uvs);
-                            faceNum += 1;
-                        }
-                        //east face
-                        if(blocks[x + 1, y, z] == BlockType.Air)
-                        {
-                            vertices.Add(blockPos + new Vector3(1, 0, 0));
-                            vertices.Add(blockPos + new Vector3(1, 1, 0));
-                            vertices.Add(blockPos + new Vector3(1, 1, 1));
-                            vertices.Add(blockPos + new Vector3(1, 0, 1));
-                            uvs.AddRange(Block.blockDict[blocks[x, y, z]].sideTexture.uvs);
-                            faceNum += 1;
-                        }
-                        //north face
-                        if(blocks[x, y, z + 1] == BlockType.Air)
+                        //north
+                        if (blocks[x, y, z + 1] == BlockType.Air)
                         {
                             vertices.Add(blockPos + new Vector3(1, 0, 1));
                             vertices.Add(blockPos + new Vector3(1, 1, 1));
                             vertices.Add(blockPos + new Vector3(0, 1, 1));
                             vertices.Add(blockPos + new Vector3(0, 0, 1));
-                            uvs.AddRange(Block.blockDict[blocks[x, y, z]].sideTexture.uvs);
+                            uvs.AddRange(Block.blockDict[blocks[x, y, z]].north.textureData.uvs);
                             faceNum += 1;
                         }
-                        //west face
-                        if(blocks[x - 1, y, z] == BlockType.Air)
+                        //south
+                        if (blocks[x, y, z - 1] == BlockType.Air)
+                        {
+                            vertices.Add(blockPos + new Vector3(0, 0, 0));
+                            vertices.Add(blockPos + new Vector3(0, 1, 0));
+                            vertices.Add(blockPos + new Vector3(1, 1, 0));
+                            vertices.Add(blockPos + new Vector3(1, 0, 0));
+                            uvs.AddRange(Block.blockDict[blocks[x, y, z]].south.textureData.uvs);
+                            faceNum += 1;
+                        }
+                        //west
+                        if (blocks[x - 1, y, z] == BlockType.Air)
                         {
                             vertices.Add(blockPos + new Vector3(0, 0, 1));
                             vertices.Add(blockPos + new Vector3(0, 1, 1));
                             vertices.Add(blockPos + new Vector3(0, 1, 0));
                             vertices.Add(blockPos + new Vector3(0, 0, 0));
-                            uvs.AddRange(Block.blockDict[blocks[x, y, z]].sideTexture.uvs);
+                            uvs.AddRange(Block.blockDict[blocks[x, y, z]].west.textureData.uvs);
+                            faceNum += 1;
+                        }
+                        //east
+                        if (blocks[x + 1, y, z] == BlockType.Air)
+                        {
+                            vertices.Add(blockPos + new Vector3(1, 0, 0));
+                            vertices.Add(blockPos + new Vector3(1, 1, 0));
+                            vertices.Add(blockPos + new Vector3(1, 1, 1));
+                            vertices.Add(blockPos + new Vector3(1, 0, 1));
+                            uvs.AddRange(Block.blockDict[blocks[x, y, z]].east.textureData.uvs);
                             faceNum += 1;
                         }
 
@@ -107,6 +110,6 @@ public class TerrainChunk : MonoBehaviour
         mesh.RecalculateNormals();
         GetComponent<MeshFilter>().mesh = mesh;
         GetComponent<MeshCollider>().sharedMesh = mesh;
-        GetComponent<MeshRenderer>().material.mainTexture = MyTexture.textureAtlas;
+        GetComponent<MeshRenderer>().material.mainTexture = WorldTexture.textureAtlas;
     }
 }
