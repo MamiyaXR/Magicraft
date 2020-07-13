@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc9efbbeba50f1a40afd426200f6d68a, type: 3}
+  m_Name: bag
+  m_EditorClassIdentifier: 
+  id: 1
+  isLocked: 0
+  size: 27
+  inventory:
+  - item: {fileID: 0}
+    itemNum: 0
+  - item: {fileID: 11400000, guid: 74728ecf947ed12439ae092f0c1f939a, type: 2}
+    itemNum: 38
+  - item: {fileID: 0}
+    itemNum: 0
+  - item: {fileID: 0}
+    itemNum: 0
+  - item: {fileID: 0}
+    itemNum: 0
+  - item: {fileID: 11400000, guid: b808c079e051d0c4e98461e927e19a97, type: 2}
+    itemNum: 28
+  - item: {fileID: 0}
+    itemNum: 0
+  - item: {fileID: 0}
+    itemNum: 0
+  - item: {fileID: 0}
+    itemNum: 0
+  - item: {fileID: 0}
+    itemNum: 0
+  - item: {fileID: 0}
+    itemNum: 0
+  - item: {fileID: 0}
+    itemNum: 0
+  - item: {fileID: 0}
+    itemNum: 0
+  - item: {fileID: 0}
+    itemNum: 0
+  - item: {fileID: 0}
+    itemNum: 0
+  - item: {fileID: 0}
+    itemNum: 0
+  - item: {fileID: 0}
+    itemNum: 0
+  - item: {fileID: 0}
+    itemNum: 0
+  - item: {fileID: 0}
+    itemNum: 0
+  - item: {fileID: 0}
+    itemNum: 0
+  - item: {fileID: 0}
+    itemNum: 0
+  - item: {fileID: 0}
+    itemNum: 0
+  - item: {fileID: 0}
+    itemNum: 0
+  - item: {fileID: 0}
+    itemNum: 0
+  - item: {fileID: 0}
+    itemNum: 0
+  - item: {fileID: 0}
+    itemNum: 0
+  - item: {fileID: 0}
+    itemNum: 0

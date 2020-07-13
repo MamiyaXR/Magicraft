@@ -27,18 +27,14 @@ public class ThirdPersonCamera : MonoBehaviour
     {
         if (target)
         {
-            x += Time.deltaTime * Input.GetAxis("Mouse X") * xSpeed;
-            y -= Time.deltaTime * Input.GetAxis("Mouse Y") * ySpeed;
-
+            x += CameraController.instance.blockCameraRotation ? 0 : Time.deltaTime * Input.GetAxis("Mouse X") * xSpeed;
+            y -= CameraController.instance.blockCameraRotation ? 0 : Time.deltaTime * Input.GetAxis("Mouse Y") * ySpeed;
             y = ClampAngle(y, yMinLimit, yMaxLimit);
-
-
             // var rotation = Quaternion.EulerAngles(y * Mathf.Deg2Rad, x * Mathf.Deg2Rad, 0);
             var rotation = Quaternion.Euler(y, x, 0);
+            transform.rotation = rotation;
             Vector3 vec = new Vector3(0.0f, 0.0f, -distance);
             var position = rotation * vec + target.position;
-
-            transform.rotation = rotation;
             transform.position = position;
         }
     }

@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 4
   image: {fileID: 21300000, guid: 2ec7def95da0ed8498976341f89cd58b, type: 3}
+  typeName: ItemBlockLeaves

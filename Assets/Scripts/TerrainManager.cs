@@ -17,14 +17,14 @@ public class TerrainManager : MonoBehaviour
 {
     public Dictionary<ChunkPos, TerrainChunk> chunkDict = new Dictionary<ChunkPos, TerrainChunk>();
     //区块模板
-    [SerializeField] private GameObject terrainChunk;
+    [SerializeField] private GameObject terrainChunk = null;
     [SerializeField] private Vector3 originalPos = Vector3.zero;
-    [SerializeField] private Transform player;
+    [SerializeField] private Transform player = null;
     private List<TerrainChunk> chunks = new List<TerrainChunk>();
     private List<ChunkPos> chunkPoses = new List<ChunkPos>();
     //噪声
     private FastNoise noise = new FastNoise();
-    private int chunkDist = 5;
+    private int chunkDist = 1;
 
     private static TerrainManager _instance;
     public static TerrainManager instance { get => _instance; }
@@ -126,11 +126,11 @@ public class TerrainManager : MonoBehaviour
 
             for(int i = 0; i < treeCount; ++i)
             {
-                int xPos = (int)(rand.NextDouble() * 14) + 1;
-                int zPos = (int)(rand.NextDouble() * 14) + 1;
+                int xPos = (int)(rand.NextDouble() * (TerrainChunk.chunkWidth - 3)) + 1;
+                int zPos = (int)(rand.NextDouble() * (TerrainChunk.chunkLength - 3)) + 1;
                 int y = TerrainChunk.chunkHeight - 1;
                 //找到地面
-                while (y > 0 && blocks[xPos, y, zPos] == BlockType.Air)
+                while (y > 0 && (blocks[xPos, y, zPos] != BlockType.Grass && blocks[xPos, y, zPos] != BlockType.Dirt && blocks[xPos, y, zPos] != BlockType.Stone))
                     --y;
                 ++y;
 
@@ -141,14 +141,14 @@ public class TerrainManager : MonoBehaviour
                         blocks[xPos, y + j, zPos] = BlockType.Trunk;
 
                 int leavesWidth = 1 + (int)(rand.NextDouble() * 6);
-                int leavesHeight = (int)(rand.NextDouble() * 3);
+                int leavesHeight = 4 + (int)(rand.NextDouble() * 3);
 
                 int iter = 0;
-                for (int m = y + treeHeight - 1; m <= y + treeHeight - 1 + treeHeight; m++)
+                for (int m = y + treeHeight - 1; m <= y + treeHeight - 1 + leavesHeight; m++)
                 {
                     for (int k = xPos - (int)(leavesWidth * .5) + iter / 2; k <= xPos + (int)(leavesWidth * .5) - iter / 2; k++)
                         for (int l = zPos - (int)(leavesWidth * .5) + iter / 2; l <= zPos + (int)(leavesWidth * .5) - iter / 2; l++)
-                            if (k >= 0 && k < 16 && l >= 0 && l < 16 && m >= 0 && m < 64 && rand.NextDouble() < .8f)
+                            if (k > 0 && k < TerrainChunk.chunkWidth + 1 && l > 0 && l < TerrainChunk.chunkLength + 1 && m >= 0 && m < 64 && rand.NextDouble() < .95f)
                                 blocks[k, m, l] = BlockType.Leaves;
 
                     iter++;

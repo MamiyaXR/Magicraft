@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float maxDist = 30;
-    [SerializeField] private LayerMask layer;
+    public bool active = true;
+    public float maxDist = 30;
+    public LayerMask layer;
     private static PlayerController m_instance;
     public static PlayerController instance { get => m_instance; }
     /*****************************************************************************************
@@ -20,12 +21,27 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
-        bool leftClick = Input.GetMouseButtonDown(0);
-        if (leftClick)
+        if (!active)
+            return;
+
+        if (Input.GetMouseButtonDown(0))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);//创建一条从主相机到鼠标点的射线
-            RaycastHit hitInfo;
-            if (Physics.Raycast(ray, out hitInfo, maxDist, layer))
+            if (!ToolManager.instance.CurrentItemFunctionFirst())
+                FunctionFirst();
+        }
+        else if (Input.GetMouseButtonDown(1))
+            ToolManager.instance.CurrentItemFunctionSecond();
+    }
+    /// <summary>
+    /// 空手时摧毁方块
+    /// </summary>
+    public void FunctionFirst()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);//创建一条从主相机到鼠标点的射线
+        RaycastHit hitInfo;
+        if (Physics.Raycast(ray, out hitInfo, maxDist, layer))
+        {
+            if(hitInfo.transform.tag == "Chunk")
             {
                 Vector3 pointInTargetBlock;
                 pointInTargetBlock = hitInfo.point + ray.direction.normalized * .01f;

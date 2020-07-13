@@ -13,7 +13,7 @@ namespace GestureRecognizer {
 	
 		public string id;
 
-		[System.Obsolete("'points' is deprecated, please use 'gesture' instead.")]
+		//[System.Obsolete("'points' is deprecated, please use 'gesture' instead.")]
 		[HideInInspector]
 		[SerializeField]
 		public List<Vector2> points;

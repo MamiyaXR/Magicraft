@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class Fire : MonoBehaviour
 {
+    [SerializeField] private float destroySpeed = 0.2f;
+    private Rigidbody rBody;
     private GameObject attachment;
     private bool hasAttachment;
     private void Start()
     {
+        rBody = GetComponent<Rigidbody>();
         attachment = null;
         hasAttachment = false;
     }
@@ -18,16 +21,20 @@ public class Fire : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
+        if (collision.transform.tag == "Fire")
+            return;
         attachment = collision.gameObject;
         hasAttachment = true;
-        StartCoroutine("Wait", 5);
+        //gameObject.transform.SetParent(attachment.transform);
+        //rBody.MovePosition(collision.contacts[0].point);
+        //Destroy(rBody);
+        StartCoroutine("DelayDestroy");
     }
-    private IEnumerator Wait(float time)
+    private IEnumerator DelayDestroy()
     {
-        Vector3 scale = transform.localScale;
-        for (float i = time; i >= 0; i -= Time.deltaTime)
+        while (transform.localScale.x >= 0)
         {
-            transform.localScale = scale * i / time;
+            transform.localScale -= Vector3.one * destroySpeed * Time.deltaTime;
             yield return 0;
         }
         Destroy(gameObject);

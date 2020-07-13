@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class RuneLetterForce : RuneLetter
 {
-    /// <summary>
-    /// 单例模式构建
-    /// </summary>
     private static RuneLetterForce _instance;
+    /*****************************************************************************************
+     *
+     *
+     *
+     *****************************************************************************************/
     public static RuneLetterForce Instance
     {
         get

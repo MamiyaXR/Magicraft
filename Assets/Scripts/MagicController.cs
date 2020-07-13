@@ -6,21 +6,27 @@ using UnityEngine.SocialPlatforms;
 
 public class MagicController : MonoBehaviour
 {
-    public static bool canUseMagic = true;
-    public static bool isUsingMagic = false;
-    [SerializeField] private Transform originPos;
-    [SerializeField] private Transform startPos;
-    [SerializeField] private GameObject magicGroup;
+    ////////////////////////////////////////////////////////////////
+    [SerializeField] private GameObject blockGroupPrefab = null;
+    ////////////////////////////////////////////////////////////////
     [Space]
-    public float magicPowerMax = 0;
-    [SerializeField] private float magicRevertSpeed = 0;
-    [SerializeField] private float magicExpenseSpeed = 0;
+    public bool active = true;
+    public bool isUsingMagic = false;
+    [SerializeField] private Transform originPos = null;
+    [SerializeField] private Transform startPos = null;
+    [SerializeField] private GameObject magicGroup = null;
+    [Space]
+    public float magicPowerMax = 100;
+    [SerializeField] private float magicRevertSpeed = 0.5f;
+    [SerializeField] private float magicExpenseSpeed = 0.5f;
     private float magicExpense = 0;
-    private bool isCalcMaigc;
+    private bool isCalcMaigc = false;
     private float _magicPower;
     public float magicPower { get => _magicPower; }
     private MagicManager _magicManager;
     public MagicManager magicManager { get => _magicManager; }
+    private static MagicController _instance;
+    public static MagicController instance { get => _instance; }
     /*****************************************************************************************
      *
      *
@@ -28,9 +34,10 @@ public class MagicController : MonoBehaviour
      *****************************************************************************************/
     private void Awake()
     {
+        if (_instance == null)
+            _instance = this;
         _magicPower = magicPowerMax;
         _magicManager = new MagicManager();
-        isCalcMaigc = false;
     }
     private void Update()
     {
@@ -41,11 +48,26 @@ public class MagicController : MonoBehaviour
         //测试用，待删除
         if (Input.GetKeyDown(KeyCode.M))
         {
-            GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            obj.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-            obj.transform.position = startPos.position;
-            Rigidbody rbody =  obj.AddComponent<Rigidbody>();
-            rbody.mass = 0.1f;
+            //GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            //obj.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+            //obj.transform.position = startPos.position;
+            //Rigidbody rbody = obj.AddComponent<Rigidbody>();
+            //rbody.mass = 0.1f;
+
+            BlockGroup bg = Instantiate(blockGroupPrefab, startPos.position, Quaternion.identity).GetComponent<BlockGroup>();
+            List<Block> blocks = new List<Block>();
+            Block block0 = new BlockGrass();
+            //Block block1 = new BlockStone();
+            //Block block2 = new BlockDirt();
+            //block0.east.linkBlock = block1;
+            //block1.west.linkBlock = block0;
+            //block1.top.linkBlock = block2;
+            //block2.bottom.linkBlock = block1;
+            blocks.Add(block0);
+            //blocks.Add(block1);
+            //blocks.Add(block2);
+            bg.blocks = blocks;
+            bg.BuildMesh();
         }
     }
     /// <summary>
@@ -53,7 +75,7 @@ public class MagicController : MonoBehaviour
     /// </summary>
     private void MagicModeControl()
     {
-        if (!canUseMagic)
+        if (!active)
             return;
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
@@ -61,8 +83,7 @@ public class MagicController : MonoBehaviour
             if (!isUsingMagic)
             {
                 isUsingMagic = true;
-                CameraController.canChangeCam = false;
-                CameraController.canRotation = false;
+                GameManager.instance.ChangeGameState(GameState.UsingMagic);
                 magicGroup.SetActive(true);
             }
             else
@@ -82,11 +103,10 @@ public class MagicController : MonoBehaviour
             float distance = 3f;
             magicManager.OnMagic(gameObject, new MagicEventArgs(magicExpense, originPos.position, direction, distance));
             magicManager.ClearMagic();
-            isUsingMagic = false;
-            CameraController.canChangeCam = true;
-            CameraController.canRotation = true;
             magicGroup.SetActive(false);
             magicExpense = 0;
+            GameManager.instance.ChangeGameState(GameState.Normal);
+            isUsingMagic = false;
         }
     }
     /// <summary>

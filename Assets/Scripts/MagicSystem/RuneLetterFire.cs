@@ -8,10 +8,12 @@ public class RuneLetterFire : RuneLetter
     private const string path = "AssetBundles/fire.unity3D";
     private const string assetName = "Assets/Prefabs/Fire.prefab";
     private GameObject fireBase;
-    /// <summary>
-    /// 单例模式构建
-    /// </summary>
     private static RuneLetterFire _instance;
+    /*****************************************************************************************
+     *
+     *
+     *
+     *****************************************************************************************/
     public static RuneLetterFire Instance
     {
         get
@@ -32,7 +34,7 @@ public class RuneLetterFire : RuneLetter
     /// </summary>
     public override void MagicLaunch(GameObject caster, MagicEventArgs e)
     {
-        GameObject obj = GameObject.Instantiate(fireBase, e.origin + e.direction * e.distance, Quaternion.identity);
-        obj.transform.localScale *= 1 + e.magicPower / 100;
+        GameObject obj = GameObject.Instantiate(GameManager.instance.firePrefab, e.origin + e.direction * e.distance, Quaternion.identity);
+        obj.transform.localScale *= e.magicPower / 100;
     }
 }

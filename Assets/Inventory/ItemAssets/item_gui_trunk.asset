@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 3
   image: {fileID: 21300000, guid: 4c5683dfae0c85145bab86674646c844, type: 3}
+  typeName: ItemBlockTrunk

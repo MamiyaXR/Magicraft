@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1
   image: {fileID: 21300000, guid: 350c11c4ac88dc749b42b1a0a112675f, type: 3}
+  typeName: ItemBlockGrass

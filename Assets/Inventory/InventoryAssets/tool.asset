@@ -16,8 +16,8 @@ MonoBehaviour:
   isLocked: 0
   size: 9
   inventory:
-  - item: {fileID: 0}
-    itemNum: 0
+  - item: {fileID: 11400000, guid: 0e395506f2eebff488d24edc11578bc0, type: 2}
+    itemNum: 25
   - item: {fileID: 0}
     itemNum: 0
   - item: {fileID: 0}

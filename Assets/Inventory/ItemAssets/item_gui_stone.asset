@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 2
   image: {fileID: 21300000, guid: 4b42533a129e0be4fa55724ae0f32172, type: 3}
+  typeName: ItemBlockStone

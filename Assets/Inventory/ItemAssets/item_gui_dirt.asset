@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0
   image: {fileID: 21300000, guid: 5062f3939fc5f024396573e75e9ab83d, type: 3}
+  typeName: ItemBlockDirt

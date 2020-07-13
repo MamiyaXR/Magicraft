@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Surface
 {
+    public Block linkBlock;
     private TextureData _textureData;
     public TextureData textureData { get => _textureData; }
     public Surface(TextureType type)

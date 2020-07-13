@@ -7,15 +7,15 @@ public class FirstPersonCamera : MonoBehaviour
     //要相机跟随的GameObject
     public Transform m_target;
     //鼠标敏度  
-    public float mousesSensity = 5F;
+    public float mousesSensity = 5f;
     //上下最大视角(Y视角)  
-    public float minYLimit = -40F;
-    public float maxYLimit = 80F;
+    public float minYLimit = -70f;
+    public float maxYLimit = 80f;
 
     Vector3 m_camRotation;
-    void Update()
+    void LateUpdate()
     {
-        if (CameraController.canRotation)
+        if (!CameraController.instance.blockCameraRotation)
         {
             //根据鼠标的移动,获取相机旋转的角度
             m_camRotation.x = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * mousesSensity;
