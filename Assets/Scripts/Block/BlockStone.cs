@@ -6,7 +6,7 @@ public class BlockStone : Block
 {
     public BlockStone()
     {
-        _type = BlockType.Stone;
+        _type = BlockType.BlockStone;
         _durability = 100;
         _top = new Surface(TextureType.Stone);
         _bottom = new Surface(TextureType.Stone);
@@ -14,9 +14,5 @@ public class BlockStone : Block
         _south = new Surface(TextureType.Stone);
         _west = new Surface(TextureType.Stone);
         _east = new Surface(TextureType.Stone);
-    }
-    public BlockStone(Vector3 position) : this()
-    {
-        this.position = position;
     }
 }

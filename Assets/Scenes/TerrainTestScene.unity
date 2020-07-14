@@ -197,6 +197,8 @@ MonoBehaviour:
   bag: {fileID: 532332794}
   firePrefab: {fileID: 2478314958354339675, guid: 4d64af2b0ff1fdf47b1f756eccf735ef,
     type: 3}
+  blockGroupPrefab: {fileID: 420755304451647800, guid: ab30b4e59309ba541839672dc856cf2d,
+    type: 3}
 --- !u!4 &26773118
 Transform:
   m_ObjectHideFlags: 0
@@ -1379,6 +1381,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventoryAsset: {fileID: 11400000, guid: 42dd123a37677184ab0f8742ffabf67e, type: 2}
+  slotList: []
   grid: {fileID: 2059485475}
   slotPrefab: {fileID: 4502649995354754550, guid: 2779a91ed391f7d419c723103aefe5e5,
     type: 3}
@@ -1395,6 +1398,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventoryAsset: {fileID: 11400000, guid: bea8e30c473c1dd48a0996a995f1e1ed, type: 2}
+  slotList: []
   grid: {fileID: 2128566764}
   slotPrefab: {fileID: 4502649995354754550, guid: 2779a91ed391f7d419c723103aefe5e5,
     type: 3}

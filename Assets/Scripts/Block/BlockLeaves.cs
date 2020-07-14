@@ -6,7 +6,7 @@ public class BlockLeaves : Block
 {
     public BlockLeaves()
     {
-        _type = BlockType.Leaves;
+        _type = BlockType.BlockLeaves;
         _durability = 1;
         _top = new Surface(TextureType.Leaves);
         _bottom = new Surface(TextureType.Leaves);
@@ -14,9 +14,5 @@ public class BlockLeaves : Block
         _south = new Surface(TextureType.Leaves);
         _west = new Surface(TextureType.Leaves);
         _east = new Surface(TextureType.Leaves);
-    }
-    public BlockLeaves(Vector3 position) : this()
-    {
-        this.position = position;
     }
 }

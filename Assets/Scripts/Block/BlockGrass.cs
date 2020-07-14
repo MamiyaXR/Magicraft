@@ -6,7 +6,7 @@ public class BlockGrass : Block
 {
     public BlockGrass()
     {
-        _type = BlockType.Grass;
+        _type = BlockType.BlockGrass;
         _durability = 10;
         _top = new Surface(TextureType.Grass);
         _bottom = new Surface(TextureType.Dirt);
@@ -14,9 +14,5 @@ public class BlockGrass : Block
         _south = new Surface(TextureType.GrassSide);
         _west = new Surface(TextureType.GrassSide);
         _east = new Surface(TextureType.GrassSide);
-    }
-    public BlockGrass(Vector3 position) : this()
-    {
-        this.position = position;
     }
 }

@@ -6,6 +6,6 @@ public class ItemBlockLeaves : ItemBlockBase
 {
     public ItemBlockLeaves()
     {
-        type = BlockType.Leaves;
+        type = BlockType.BlockLeaves;
     }
 }

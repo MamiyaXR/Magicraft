@@ -6,7 +6,7 @@ public class BlockTrunk : Block
 {
     public BlockTrunk()
     {
-        _type = BlockType.Trunk;
+        _type = BlockType.BlockTrunk;
         _durability = 50;
         _top = new Surface(TextureType.TreeCX);
         _bottom = new Surface(TextureType.TreeCX);
@@ -14,9 +14,5 @@ public class BlockTrunk : Block
         _south = new Surface(TextureType.TreeSide);
         _west = new Surface(TextureType.TreeSide);
         _east = new Surface(TextureType.TreeSide);
-    }
-    public BlockTrunk(Vector3 position) : this()
-    {
-        this.position = position;
     }
 }

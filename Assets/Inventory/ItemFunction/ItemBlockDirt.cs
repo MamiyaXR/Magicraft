@@ -6,6 +6,6 @@ public class ItemBlockDirt : ItemBlockBase
 {
     public ItemBlockDirt()
     {
-        type = BlockType.Dirt;
+        type = BlockType.BlockDirt;
     }
 }

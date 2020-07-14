@@ -6,6 +6,6 @@ public class ItemBlockStone : ItemBlockBase
 {
     public ItemBlockStone()
     {
-        type = BlockType.Stone;
+        type = BlockType.BlockStone;
     }
 }

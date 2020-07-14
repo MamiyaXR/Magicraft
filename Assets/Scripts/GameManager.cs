@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     private bool canOpenUI = true;
     public Dictionary<InventoryID, InventoryManager> inventoryDict;
     public GameObject firePrefab;
+    public GameObject blockGroupPrefab;
     private GameState _gameState = GameState.unInit;
     public GameState gameState { get => _gameState; }
     private static GameManager _instance;

@@ -6,6 +6,6 @@ public class ItemBlockGrass : ItemBlockBase
 {
     public ItemBlockGrass()
     {
-        type = BlockType.Grass;
+        type = BlockType.BlockGrass;
     }
 }

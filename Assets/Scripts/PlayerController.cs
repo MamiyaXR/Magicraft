@@ -38,31 +38,24 @@ public class PlayerController : MonoBehaviour
     public void FunctionFirst()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);//创建一条从主相机到鼠标点的射线
-        RaycastHit hitInfo;
-        if (Physics.Raycast(ray, out hitInfo, maxDist, layer))
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, maxDist, layer))
         {
-            if(hitInfo.transform.tag == "Chunk")
+            if(hit.collider.tag == "Chunk")
             {
                 Vector3 pointInTargetBlock;
-                pointInTargetBlock = hitInfo.point + ray.direction.normalized * .01f;
-
-                //获得指向的区块chunk (不能用碰撞collider找)
-                int chunkPosX = Mathf.FloorToInt(pointInTargetBlock.x / TerrainChunk.chunkWidth) * TerrainChunk.chunkWidth;
-                int chunkPosZ = Mathf.FloorToInt(pointInTargetBlock.z / TerrainChunk.chunkLength) * TerrainChunk.chunkLength;
-                ChunkPos cp = new ChunkPos(chunkPosX, chunkPosZ);
-                TerrainChunk tc = TerrainManager.instance.chunkDict[cp];
-
-                //获得区块内block的下标
-                int bix = Mathf.FloorToInt(pointInTargetBlock.x) - chunkPosX + 1;
-                int biy = Mathf.FloorToInt(pointInTargetBlock.y);
-                int biz = Mathf.FloorToInt(pointInTargetBlock.z) - chunkPosZ + 1;
+                pointInTargetBlock = hit.point + ray.direction.normalized * .01f;
+                int x, y, z;
+                TerrainChunk tc = TerrainManager.instance.GetBlockByPosition(pointInTargetBlock, out x, out y, out z);
 
                 //处理
+                if (tc == null)
+                    return;
                 float itemPosX = Mathf.FloorToInt(pointInTargetBlock.x) + 0.5f;
                 float itemPosY = Mathf.FloorToInt(pointInTargetBlock.y) + 0.5f;
                 float itemPosZ = Mathf.FloorToInt(pointInTargetBlock.z) + 0.5f;
-                BlockType itemType = tc.blocks[bix, biy, biz];
-                tc.blocks[bix, biy, biz] = BlockType.Air;
+                BlockType itemType = tc.blocks[x, y, z].type;
+                tc.blocks[x, y, z] = null;
                 tc.BuildMesh();
                 ItemManager.instance.CreateBlockItem(itemType, new Vector3(itemPosX, itemPosY, itemPosZ), Quaternion.identity);
             }

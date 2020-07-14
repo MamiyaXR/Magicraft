@@ -6,6 +6,6 @@ public class ItemBlockTrunk : ItemBlockBase
 {
     public ItemBlockTrunk()
     {
-        type = BlockType.Trunk;
+        type = BlockType.BlockTrunk;
     }
 }

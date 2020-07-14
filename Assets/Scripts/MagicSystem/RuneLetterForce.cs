@@ -30,15 +30,44 @@ public class RuneLetterForce : RuneLetter
     public override void MagicLaunch(GameObject caster, MagicEventArgs e)
     {
         RaycastHit hit;
+        Rigidbody rBody;
         if (Physics.Raycast(e.origin, e.direction, out hit, e.distance * 5f))
         {
-            Collider collider = hit.collider;
-            if(collider != null)
+            if(hit.collider.tag == "Chunk")
             {
-                Rigidbody rbody = collider.GetComponent<Rigidbody>();
-                if (rbody != null)
-                    rbody.AddForce(e.direction * e.magicPower);
+                Vector3 pointInTargetBlock;
+                pointInTargetBlock = hit.point + e.direction.normalized * .01f;
+                int x, y, z;
+                TerrainChunk tc = TerrainManager.instance.GetBlockByPosition(pointInTargetBlock, out x, out y, out z);
+
+                if (tc == null)
+                    return;
+                float blockPosX = Mathf.FloorToInt(pointInTargetBlock.x) + 0.5f;
+                float blockPosY = Mathf.FloorToInt(pointInTargetBlock.y) + 0.5f;
+                float blockPosZ = Mathf.FloorToInt(pointInTargetBlock.z) + 0.5f;
+                Block block = tc.blocks[x, y, z];
+                tc.blocks[x, y, z] = null;
+                tc.BuildMesh();
+
+                block.top.linkBlock = null;
+                block.bottom.linkBlock = null;
+                block.north.linkBlock = null;
+                block.south.linkBlock = null;
+                block.west.linkBlock = null;
+                block.east.linkBlock = null;
+                BlockGroup bg = GameObject.Instantiate(GameManager.instance.blockGroupPrefab, 
+                                                        new Vector3(blockPosX, blockPosY, blockPosZ), 
+                                                        Quaternion.identity).GetComponent<BlockGroup>();
+                bg.blocks.Add(block);
+                bg.BuildMesh();
+                rBody = bg.GetComponent<Rigidbody>();
+                if (rBody != null)
+                    rBody.AddForce(e.direction * e.magicPower);
+                return;
             }
+            rBody = hit.collider.GetComponent<Rigidbody>();
+            if (rBody != null)
+                rBody.AddForce(e.direction * e.magicPower);
         }
     }
 }

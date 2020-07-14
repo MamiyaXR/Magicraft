@@ -2,20 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 全种类Block的枚举，名称与类名对应
+/// </summary>
 public enum BlockType
 {
-    Air,
-    Dirt,
-    Grass,
-    Stone,
-    Trunk,
-    Leaves
+    Air = 0,
+    BlockDirt,
+    BlockGrass,
+    BlockStone,
+    BlockTrunk,
+    BlockLeaves
 }
-
-public class Block
+/// <summary>
+/// Block基类
+/// </summary>
+public abstract class Block
 {
-    //位置
-    public Vector3 position;
+    public bool active;
     //类型
     protected BlockType _type;
     public BlockType type { get => _type; }
@@ -38,10 +42,11 @@ public class Block
 
     public static Dictionary<BlockType, Block> blockDict = new Dictionary<BlockType, Block>()
     {
-        { BlockType.Dirt, new BlockDirt() },
-        { BlockType.Grass, new BlockGrass() },
-        { BlockType.Stone, new BlockStone() },
-        { BlockType.Trunk, new BlockTrunk() },
-        { BlockType.Leaves, new BlockLeaves() }
+        { BlockType.Air, null },
+        { BlockType.BlockDirt, new BlockDirt() },
+        { BlockType.BlockGrass, new BlockGrass() },
+        { BlockType.BlockStone, new BlockStone() },
+        { BlockType.BlockTrunk, new BlockTrunk() },
+        { BlockType.BlockLeaves, new BlockLeaves() },
     };
 }
