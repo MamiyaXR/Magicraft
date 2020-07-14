@@ -47,7 +47,6 @@ public class GameManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.B))
             {
                 bag.SetActive(!bag.activeSelf);
-                SetCursorVisible(bag.activeSelf);
                 if (bag.activeSelf)
                     ChangeGameState(GameState.OpenUI);
                 else
@@ -61,9 +60,6 @@ public class GameManager : MonoBehaviour
     /// <param name="visible">为true时显示，为false时隐藏</param>
     public void SetCursorVisible(bool visible)
     {
-        if (Cursor.visible == visible)
-            return;
-
         Cursor.visible = visible;
         cursor.SetActive(!visible);
         if(visible)

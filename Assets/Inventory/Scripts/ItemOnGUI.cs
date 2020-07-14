@@ -76,17 +76,23 @@ public class ItemOnGUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         //拖到格子，堆叠，交换（暂：只交换）
         if (!processed && eventData.pointerCurrentRaycast.gameObject.name == "Item")
         {
+            //交换位置
             rTransform.SetParent(eventData.pointerCurrentRaycast.gameObject.transform.parent);
             rTransform.localPosition = Vector3.zero;
             eventData.pointerCurrentRaycast.gameObject.transform.SetParent(originalParent);
             eventData.pointerCurrentRaycast.gameObject.transform.localPosition = Vector3.zero;
-
+            //交换数据层
             ItemOnGUI target = eventData.pointerCurrentRaycast.gameObject.GetComponent<ItemOnGUI>();
             int targetIndex = GameManager.instance.inventoryDict[target.inventoryID].inventoryAsset.inventory.IndexOf(target.slotData);
             int index = GameManager.instance.inventoryDict[inventoryID].inventoryAsset.inventory.IndexOf(slotData);
             GameManager.instance.inventoryDict[target.inventoryID].inventoryAsset.inventory[targetIndex] = slotData;
             GameManager.instance.inventoryDict[inventoryID].inventoryAsset.inventory[index] = target.slotData;
-
+            //交换显示层
+            int targetSlotIndex = GameManager.instance.inventoryDict[target.inventoryID].slotList.IndexOf(target);
+            int slotIndex = GameManager.instance.inventoryDict[inventoryID].slotList.IndexOf(this);
+            GameManager.instance.inventoryDict[target.inventoryID].slotList[targetSlotIndex] = this;
+            GameManager.instance.inventoryDict[inventoryID].slotList[slotIndex] = target;
+            //交换库ID
             InventoryID tempID = inventoryID;
             inventoryID = target.inventoryID;
             target.inventoryID = tempID;

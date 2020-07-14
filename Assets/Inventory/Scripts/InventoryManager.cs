@@ -6,9 +6,9 @@ using UnityEngine.EventSystems;
 public class InventoryManager : MonoBehaviour
 {
     public InventoryAsset inventoryAsset;
+    public List<ItemOnGUI> slotList = new List<ItemOnGUI>();
     [SerializeField] protected Transform grid;
     [SerializeField] protected GameObject slotPrefab;
-    protected List<ItemOnGUI> slotList = new List<ItemOnGUI>();
     /*****************************************************************************************
      *
      *
