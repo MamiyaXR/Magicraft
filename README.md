@@ -2,7 +2,7 @@
 自制沙盒游戏原型。
 ### 如何开始
 * GitHub内容为项目源码，导入Unity运行。<br>
-展示视频：[pan.baidu.com/s/1NfHbeB56XzyYh9b--aDhIQ](https://pan.baidu.com/s/1NfHbeB56XzyYh9b--aDhIQ)，提取码：spwc。
+展示视频：[pan.baidu.com/s/1TPnYZVRBOyzkyR4EbOW6bQ](https://pan.baidu.com/s/1TPnYZVRBOyzkyR4EbOW6bQ)，提取码：8yvb。
 ### 运行环境
 * Unity ver 2019.1或更高。
 ### 简介
